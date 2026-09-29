@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Sierra Vista</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.css" />
+    <style>
+        body { margin: 0; }
+        #map { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as maplibregl from 'https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.mjs';
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            center: [-110.3037, 31.5455],   // [lng, lat]
+            zoom: 16,
+            pitch: 60,
+            bearing: 25,
+            antialias: true
+        });
+        map.addControl(new maplibregl.NavigationControl({visualizePitch: true}), 'top-right');
+        map.on("load", () => {
+            const layers = map.getStyle().layers;
+            let labelLayerId;
+            for (const layer of layers) {
+                if (layer.type === "symbol" && layer.layout && layer.layout["text-field"]) {
+                    labelLayerId = layer.id;
+                    break;
+                }
+            }
+            map.addLayer({id: "sierra-vista-3d-buildings", type: "fill-extrusion",
+            type: "fill-extrusion",
+            source: "openfreemap",
+            "source-layer": "building",
+            minzoom: 15,
+            filter: ["!=", ["get", "hide"], "true"],
+            paint: {
+               "fill-extrusion-color": [interpolate, ["linear"],["get", "render_height"],
+                0, "#f6d7a7",
+                8, "#d97e5d",
+                20, "#713f2c"],
+                // Went wild with the colors and what I thought was the 3d rendering, not currently working.
+            }
+        });
+    });
+        window.map = map;
+    </script>
+</body>
+</html>
