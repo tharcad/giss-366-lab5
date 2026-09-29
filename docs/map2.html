@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tombstone Controls Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@watergis/maplibre-gl-terradraw@1.0.1/dist/maplibre-gl-terradraw.css"/>
+    //Added the terradraw css link to the head of the html file was recommended by the terradraw documentation to ensure the controls are styled correctly.
+    //Also due to map not rendering correctly, I added the terradraw script link to the body of the html file as recommended by the terradraw documentation.
+   <style>
+        body { margin: 0; }
+        #map { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@watergis/maplibre-gl-terradraw@1.0.1/dist/maplibre-gl-terradraw.umd.js"></script>
+    //Added as recommended by the terradraw documentation to ensure the map renders correctly. Was unable prior to addition, if unnecessary, can be removed.
+    <script type="module">
+        import * as maplibregl from 'https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.mjs';
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            center: [-110.0676, 31.7130],   // [lng, lat]
+            zoom: 15
+           
+        });
+        //Most Autofilled by VS Code for transparency.
+        map.addControl(new maplibregl.NavigationControl(), 'top-left');
+        map.addControl(new maplibregl.ScaleControl(), 'bottom-right');
+        map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+        map.addControl(new maplibregl.TerradrawControl(), 'top-left');
+        //I don't know if Terradrawcontrol is mean't to appear on the map as currently it is not.
+        const draw = new maplibreTerraDraw.TerraDraw({
+            mode: 'draw_polygon',
+            showControlsDefault: false,
+            controls: {
+                point: true,
+                line: true,
+                polygon: true,
+                delete: true
+            }
+        });
+        window.map = map;
+    </script>
+</body>
+</html>
