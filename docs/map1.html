@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bisbee, Arizona</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.css" />
+    <style>
+        body { margin: 0; }
+        #map { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as maplibregl from 'https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.mjs';
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.openfreemap.org/styles/dark',
+            center: [-109.9284, 31.4482],   // [lng, lat]
+            zoom: 14,
+            pitch: 55,
+            bearing: -25
+            
+        });
+        window.map = map;
+    </script>
+</body>
+</html>
