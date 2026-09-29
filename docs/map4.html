@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bisbee Childhood Places</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.css" />
+    <style>
+        body { margin: 0; }
+        #map { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as maplibregl from 'https://unpkg.com/maplibre-gl@^6.10.0/dist/maplibre-gl.mjs';
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.openfreemap.org/styles/positron',
+            center: [-109.89, 31.42],  // [lng, lat]
+            zoom: 12.5
+        });
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+        map.on("load", () => {
+            const childhoodPlaces = {
+                type: "FeatureCollection",
+                features: [
+                    {
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [-109.8919, 31.4229] // [lng, lat]
+                            },
+                            properties: {
+                                title: "Mason Addition Road",
+                                description: "This is where I grew up.",
+                                category: "Childhood Home",
+                                importance: "1"
+                            }
+                        },
+                        {
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [-109.88142, 31.41688] // [lng, lat]
+                            },
+                            properties: {
+                                title: "Greenway Elementary School",
+                                description: "This is where I went to elementary school.",
+                                category: "School",
+                                importance: "2"
+                            }
+                        },
+                        {
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [-109.8795, 31.4098] // [lng, lat]
+                            },
+                            properties: {
+                                title: "Warren BallPark",
+                                description: "One of few landmarks I remember from my childhood.",
+                                category: "Landmark",
+                                importance: "4"
+                            }
+                        },
+                        { 
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [-109.9284, 31.4482] // [lng, lat]
+                            },
+                            properties: {
+                                title: "Downtown Bisbee",
+                                description: "Famous for the Copper Queen Mine and the Bisbee Mining & Historical Museum.",
+                                category: "Landmark",
+                                importance: "3"
+                            }
+                        }
+                    ]
+                };
+                map.addSource("childhood-places-source", {
+                    type: "geojson",
+                    data: childhoodPlaces
+                });
+                map.addLayer({
+                    id: "childhood-places-layer",
+                    type: "circle",
+                    source: "childhood-places-source",
+                    paint: {
+                        "circle-radius": 6,
+                        "circle-color": [
+                            "match",
+                            ["get", "category"],
+                            "Childhood Home", "#FF0000",
+                            "School", "#00FF00",
+                            "Landmark", "#0000FF",
+                            /* other */ "#CCCCCC"
+                        ]
+                    
+                    }
+                });
+                // Add popups for each feature, Adding this grey text seemingly autofilled the code for the popups. I was am amazed by this program.
+                map.on("click", "childhood-places-layer", (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const title = e.features[0].properties.title;
+                    const description = e.features[0].properties.description;
+                    const category = e.features[0].properties.category;
+                    const importance = e.features[0].properties.importance;
+
+                    new maplibregl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(`<strong>${title}</strong><br>${description}<br>Category: ${category}<br>Importance: ${importance}`)
+                        .addTo(map);
+                });
+        });
+        window.map = map;
+    </script>
+</body>
+</html>
