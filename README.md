@@ -3,7 +3,7 @@ For What I built it was a set of maps encompassing the regions of Tombstone, Bis
 
 ## Web Map Gallery
 
-Gallery Link: https://tharcad.github.io/giss-366-lab5/
+Gallery Link: [https://tharcad.github.io/giss-366-lab5/](https://tharcad.github.io/giss-366-lab5/)
 
 ---
 
